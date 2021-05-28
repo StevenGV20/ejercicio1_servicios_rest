@@ -49,11 +49,20 @@ public class ProductoController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscaById(@PathVariable int id){
-		Producto producto=service.buscaById(id)
-				.orElseThrow(()->new NotFoundException(id));
-		return ResponseEntity
-				.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ProductoController.class).buscaById(producto.getIdproducto())).toUri())
-				.body(assembler.toModel(producto));
+		Optional<Producto> producto=service.buscaById(id);
+		if(producto.isPresent()) {
+			return ResponseEntity
+					.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ProductoController.class).buscaById(producto.get().getIdproducto())).toUri())
+					.body(assembler.toModel(producto.get()));			
+		}else {
+			return ResponseEntity
+					.status(HttpStatus.METHOD_NOT_ALLOWED)
+					.header(HttpHeaders.CONTENT_TYPE, MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE)
+					.body(Problem.create()
+							.withTitle("Error")
+							.withDetail("El producto con codigo " + id +" no existe"));
+		}
+		
 	}
 	
 	@PostMapping("/")
@@ -124,7 +133,7 @@ public class ProductoController {
 		}
 	}
 	
-	@DeleteMapping("/{id}/")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteProducto(@PathVariable int id){
 		service.eliminaProducto(id);
 		return ResponseEntity.noContent().build();
