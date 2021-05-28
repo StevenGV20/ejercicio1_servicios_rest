@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ejercicio1.rest.assembler.ClienteModelAssembler;
 import com.ejercicio1.rest.entity.Cliente;
-import com.ejercicio1.rest.exception.ClienteNotFoundException;
+import com.ejercicio1.rest.exception.NotFoundException;
 import com.ejercicio1.rest.service.ClienteService;
 
 @RestController
@@ -36,7 +36,7 @@ public class ClienteController {
 	public ClienteController() {
 		assembler=new ClienteModelAssembler();
 	}*/
-	
+
 	@GetMapping("/")
 	public CollectionModel<EntityModel<Cliente>> listaAll(){
 		List<EntityModel<Cliente>> clients = service.listaAll().stream()
@@ -49,7 +49,7 @@ public class ClienteController {
 	@GetMapping("/{id}")
 	public EntityModel<Cliente> buscaById(@PathVariable int id){
 		Cliente cliente=service.buscaById(id)
-				.orElseThrow(()->new ClienteNotFoundException(id));
+				.orElseThrow(()->new NotFoundException(id));
 		return assembler.toModel(cliente);
 	}
 	

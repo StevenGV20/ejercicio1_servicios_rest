@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ejercicio1.rest.entity.Categoria;
 import com.ejercicio1.rest.entity.Producto;
 import com.ejercicio1.rest.repository.CategoriaRepository;
 import com.ejercicio1.rest.repository.ProductoRepository;
 
+@Service
 public class ProductoServiceImpl implements ProductoService{
 
 	@Autowired
@@ -40,6 +42,11 @@ public class ProductoServiceImpl implements ProductoService{
 	@Override
 	public Optional<Producto> buscaById(int cod) {
 		return productoRepository.findById(cod);
+	}
+
+	@Override
+	public Optional<Producto> buscaByPartNumber(String number) {
+		return productoRepository.buscaPorPartNumber(number);
 	}
 
 }

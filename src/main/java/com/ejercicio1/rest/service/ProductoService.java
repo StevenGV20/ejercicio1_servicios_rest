@@ -13,6 +13,7 @@ public interface ProductoService {
 	public abstract Producto mantenerProducto(Producto bean);
 	public abstract void eliminaProducto(int cod);
 	public abstract Optional<Producto> buscaById(int cod);
+	public abstract Optional<Producto> buscaByPartNumber(String number);
 	
 	
 	
